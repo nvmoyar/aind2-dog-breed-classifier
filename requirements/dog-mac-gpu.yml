@@ -1,4 +1,4 @@
-name: dog-project
+name: dog-gpu-project
 channels:
 - damianavila82
 - defaults
@@ -189,6 +189,7 @@ dependencies:
   - backports.shutil-get-terminal-size==1.0.0
   - cvxopt==1.1.9
   - et-xmlfile==1.0.1
+  - floyd-cli==0.10.28
   - ipython-genutils==0.1.0
   - jupyter-client==5.0.0
   - jupyter-console==5.1.0
