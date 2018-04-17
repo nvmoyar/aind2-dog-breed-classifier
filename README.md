@@ -1,108 +1,35 @@
 [//]: # (Image References)
 
-[image1]: ./images/sample_dog_output.png "Sample Output"
-[image2]: ./images/vgg16_model.png "VGG-16 Model Keras Layers"
-[image3]: ./images/vgg16_model_draw.png "VGG16 Model Figure"
+[image1]: ./images/dog-breed-classifier_screenshot.png "Project Screenshot"
 
 
 ## Project Overview
 
-Welcome to the Convolutional Neural Networks (CNN) project in the AI Nanodegree! In this project, you will learn how to build a pipeline that can be used within a web or mobile app to process real-world, user-supplied images.  Given an image of a dog, your algorithm will identify an estimate of the canine’s breed.  If supplied an image of a human, the code will identify the resembling dog breed.  
+### Part 1: Image dectector
 
-![Sample Output][image1]
+In this project, we build a pipeline that can be used within a web or mobile app to process real-world, user-supplied images. Given an image, the algorithm will be able to detect if there is a human face in it using OpenCV's implementation of Haar feature-based cascade classifiers. At this point, we need to make the first user experience decision about whether or not notify the user to provide only clear human images, since Haar cascades are good for generic and static objects, and these kind of classifiers are weak detecting variations of that object. A little discussion of this topic is provided in the notebook. 
 
-Along with exploring state-of-the-art CNN models for classification, you will make important design decisions about the user experience for your app.  Our goal is that by completing this lab, you understand the challenges involved in piecing together a series of models designed to perform various tasks in a data processing pipeline.  Each model has its strengths and weaknesses, and engineering a real-world application often involves solving many problems without a perfect answer.  Your imperfect solution will nonetheless create a fun user experience!
+Right after we proceed to use a pre-trained ResNet-50 model to detect dogs in images using ImageNet. Since this dataset is very large and the categories corresponding to dogs appear in an uninterrupted sequence and correspond to dictionary keys 151-268, some computation can be saved by returning the probability vector for the categories related to dog breeds on ImageNet. This way we can build a 'cheap' dog detector in the same way we built a 'human detector' with Haar cascades on the first part. 
 
-## Project Instructions
+### Part 2: Dog breed classifier using Keras 
 
-### Instructions
+The next step of the project is to build a dog breed classifier using a deep learning approach getting at least 1% of accuracy. The purpose of this model will be to build an algorithm that given an image of a dog, it identifies an estimate of the canine’s breed, and   if an image of a human is provided, the code will detect if there is a human face in the picture and will return the most resembling dog breed.   
 
-1. Clone the repository and navigate to the downloaded folder.
-```	
-git clone https://github.com/udacity/dog-project.git
-cd dog-project
-```
+A CNN is architecture using Keras is proposed, and its parameters used, are discussed. The final proposal uses **dropouts** to prevent overfitting, **Global Average Pooling** layers to reduce dimensionality and **Batch Normalization**. In order to improve the accuracy, **Data Augmentation** has been proven as worthy. Once the model was validated relatively quickly, Data augmentation has been demonstrated as an absolute performance enhancer achieving an accuracy of 26.1962% on the test set. 
 
-2. Download the [dog dataset](https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/dogImages.zip).  Unzip the folder and place it in the repo, at location `path/to/dog-project/dogImages`. 
+### Part 3: Transfer learning
 
-3. Download the [human dataset](https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/lfw.zip).  Unzip the folder and place it in the repo, at location `path/to/dog-project/lfw`.  If you are using a Windows machine, you are encouraged to use [7zip](http://www.7-zip.org/) to extract the folder. 
+On this part, we use [bottleneck features](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html) to save time on computation. Since we are working with Keras bottleneck features, that means that we are working with the last activation maps before the fully-connected layers, thus we need to add the fully connected layers. A little experiment and discussion are provided, and InceptionV3 and ResNet-50 comparison are provided. 
 
-4. Donwload the [VGG-16 bottleneck features](https://s3-us-west-1.amazonaws.com/udacity-aind/dog-project/DogVGG16Data.npz) for the dog dataset.  Place it in the repo, at location `path/to/dog-project/bottleneck_features`.
+### Part 4: Write a custom algorithm
 
-5. (Optional) __If you plan to install TensorFlow with GPU support on your local machine__, follow [the guide](https://www.tensorflow.org/install/) to install the necessary NVIDIA software on your system.  If you are using an EC2 GPU instance, you can skip this step.
+For the last part of this notebook, we build a complete algorithm using the detectors and model written in the previous parts, and we use it to test not previously seen data of dogs and human faces to guess the dog breed or the resembling dog breed. 
 
-6. (Optional) **If you are running the project on your local machine (and not using AWS)**, create (and activate) a new environment.
+![Project Screenshot][image1]
 
-	- __Linux__ (to install with __GPU support__, change `requirements/dog-linux.yml` to `requirements/dog-linux-gpu.yml`): 
-	```
-	conda env create -f requirements/dog-linux.yml
-	source activate dog-project
-	```  
-	- __Mac__ (to install with __GPU support__, change `requirements/dog-mac.yml` to `requirements/dog-mac-gpu.yml`): 
-	```
-	conda env create -f requirements/dog-mac.yml
-	source activate dog-project
-	```  
-	- __Windows__ (to install with __GPU support__, change `requirements/dog-windows.yml` to `requirements/dog-windows-gpu.yml`):  
-	```
-	conda env create -f requirements/dog-windows.yml
-	activate dog-project
-	```
-	
-7. (Optional) **If you are running the project on your local machine (and not using AWS)** and Step 6 throws errors, try this __alternative__ step to create your environment.
 
-	- __Linux__ or __Mac__ (to install with __GPU support__, change `requirements/requirements.txt` to `requirements/requirements-gpu.txt`): 
-	```
-	conda create --name dog-project python=3.5
-	source activate dog-project
-	pip install -r requirements/requirements.txt
-	```  
-	- __Windows__ (to install with __GPU support__, change `requirements/requirements.txt` to `requirements/requirements-gpu.txt`):  
-	```
-	conda create --name dog-project python=3.5
-	activate dog-project
-	pip install -r requirements/requirements.txt
-	```
-	
-8. (Optional) **If you are using AWS**, install Tensorflow.
-```
-sudo python3 -m pip install -r requirements/requirements-gpu.txt
-```
-	
-9. Switch [Keras backend](https://keras.io/backend/) to TensorFlow.
-	- __Linux__ or __Mac__: 
-		```
-		KERAS_BACKEND=tensorflow python -c "from keras import backend"
-		```
-	- __Windows__: 
-		```
-		set KERAS_BACKEND=tensorflow
-		python -c "from keras import backend"
-		```
+### Install environment, Project instructions and Test
 
-10. (Optional) **If you are running the project on your local machine (and not using AWS)**, create an [IPython kernel](http://ipython.readthedocs.io/en/stable/install/kernel_install.html) for the `dog-project` environment. 
-```
-python -m ipykernel install --user --name dog-project --display-name "dog-project"
-```
-
-11. Open the notebook.
-```
-jupyter notebook dog_app.ipynb
-```
-
-12. (Optional) **If you are running the project on your local machine (and not using AWS)**, before running code, change the kernel to match the dog-project environment by using the drop-down menu (**Kernel > Change kernel > dog-project**). Then, follow the instructions in the notebook.
-
-__NOTE:__ While some code has already been implemented to get you started, you will need to implement additional functionality to successfully answer all of the questions included in the notebook. __Unless requested, do not modify code that has already been included.__
-
-## Evaluation
-
-Your project will be reviewed by a Udacity reviewer against the CNN project [rubric](https://review.udacity.com/#!/rubrics/810/view).  Review this rubric thoroughly, and self-evaluate your project before submission.  All criteria found in the rubric must meet specifications for you to pass.
-
-## Project Submission
-
-When you are ready to submit your project, collect the following files and compress them into a single archive for upload:
-- The `dog_app.ipynb` file with fully functional code, all code cells executed and displaying output, and all questions answered.
-- An HTML or PDF export of the project notebook with the name `report.html` or `report.pdf`.
-- Any additional images used for the project that were not supplied to you for the project. __Please do not include the project data sets in the `dogImages/` or `lfw/` folders.  Likewise, please do not include the `bottleneck_features/` folder.__
-
-Alternatively, your submission could consist of the GitHub link to your repository.
+* [Install instructions](https://github.com/udacity/dog-project)
+* [Test](http://localhost:8888/notebooks/dog-project/dog_app.ipynb)
+* [Demo](https://www.floydhub.com/nvmoyar/projects/dog-breed)
