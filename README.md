@@ -31,5 +31,5 @@ For the last part of this notebook, we build a complete algorithm using the dete
 ### Install environment, Project instructions and Test
 
 * [Install instructions](https://github.com/udacity/dog-project)
-* [Test](http://localhost:8888/notebooks/dog-project/dog_app.ipynb)
+* [Test](http://localhost:8888/notebooks/AIND-DogBreedClassifier/dog_app.ipynb)
 * [Demo](https://www.floydhub.com/nvmoyar/projects/dog-breed)
