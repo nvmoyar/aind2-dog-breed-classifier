@@ -1,3 +1,5 @@
+# Artificial Intelligence Engineer Nanodegree
+
 [//]: # (Image References)
 
 [image1]: ./images/dog-breed-classifier_screenshot.png "Project Screenshot"
@@ -33,3 +35,34 @@ For the last part of this notebook, we build a complete algorithm using the dete
 * [Install instructions](https://github.com/udacity/dog-project)
 * [Test](http://localhost:8888/notebooks/AIND-DogBreedClassifier/dog_app.ipynb)
 * [Demo](https://www.floydhub.com/nvmoyar/projects/dog-breed)
+
+#### Requirements
+
+FloydHub is a platform for training and deploying deep learning models in the cloud. It removes the hassle of launching your own cloud instances and configuring the environment. For example, FloydHub will automatically set up an AWS instance with TensorFlow, the entire Python data science toolkit, and a GPU. Then you can run your scripts or Jupyter notebooks on the instance. 
+For this project: 
+
+> floyd run --mode jupyter --gpu --env tensorflow-1.0
+
+You can see your instance on the list is running and has ID XXXXXXXXXXXXXXXXXXXXXX. So you can stop this instance with Floyd stop XXXXXXXXXXXXXXXXXXXXXX. Also, if you want more information about that instance, use Floyd info XXXXXXXXXXXXXXXXXXXXXX
+
+#### Environments
+
+FloydHub comes with a bunch of popular deep learning frameworks such as TensorFlow, Keras, Caffe, Torch, etc. You can specify which framework you want to use by setting the environment. Here's the list of environments FloydHub has available, with more to come!
+
+#### Datasets 
+
+With FloydHub, you are uploading data from your machine to their remote instance. It's a really bad idea to upload large datasets like CIFAR along with your scripts. Instead, you should always download the data on the FloydHub instance instead of uploading it from your machine.
+
+Further Reading: [How and Why mount data to your job](https://docs.floydhub.com/guides/data/mounting_data/)
+
+### Usage 
+
+floyd run --gpu --env tensorflow-1.1 --data nvmoyar/datasets/bottleneck_features/2:bottleneck_features --data nvmoyar/datasets/lfw/1:lfw_ds --data nvmoyar/datasets/dogimages/1:dogimages_ds --mode jupyter
+
+**You only need to mount the data to your job, since datasets have been gently uploaded for you**
+
+#### Output
+
+Often you'll be writing data out, things like TensorFlow checkpoints, updated notebooks, trained models and HDF5 files. You will find all these files, you can get links to the data with:
+
+> floyd output run_ID
